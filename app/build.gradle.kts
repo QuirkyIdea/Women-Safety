@@ -75,6 +75,9 @@ dependencies {
     // Biometric authentication
     implementation("androidx.biometric:biometric:1.1.0")
 
+    // AppCompat (required for FragmentActivity → BiometricPrompt)
+    implementation("androidx.appcompat:appcompat:1.6.1")
+
     // Kotlin Serialization (vault index JSON)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     

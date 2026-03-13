@@ -36,7 +36,7 @@ import com.example.suraksha.ui.screens.OnboardingActivity
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(mainViewModel: MainViewModel) {
+fun SettingsScreen(mainViewModel: MainViewModel, onNavigateToVault: () -> Unit = {}) {
     val context = LocalContext.current
     val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
     var showResetDialog by remember { mutableStateOf(false) }
@@ -262,6 +262,15 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
                     title = "Location Accuracy",
                     subtitle = "High accuracy GPS for precise location",
                     onClick = { }
+                )
+                
+                SettingsDivider()
+                
+                SettingsItem(
+                    icon = Icons.Default.Security,
+                    title = "Secure Evidence Vault",
+                    subtitle = "AES-256 encrypted, biometric-protected storage",
+                    onClick = { onNavigateToVault() }
                 )
             }
             

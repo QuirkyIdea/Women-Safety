@@ -2,7 +2,7 @@ package com.example.suraksha
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
@@ -25,7 +25,7 @@ import com.example.suraksha.ui.theme.SurakshaTheme
 import com.example.suraksha.ui.viewmodels.MainViewModel
 import com.example.suraksha.utils.PermissionManager
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     
     private val mainViewModel: MainViewModel by viewModels()
     
@@ -94,7 +94,6 @@ fun SurakshaApp(mainViewModel: MainViewModel) {
                 listOf(
                     NavigationItem.Home,
                     NavigationItem.Recordings,
-                    NavigationItem.Vault,      // ADDED
                     NavigationItem.Contacts,
                     NavigationItem.Settings
                 ).forEach { screen ->
@@ -146,11 +145,13 @@ fun SurakshaApp(mainViewModel: MainViewModel) {
             }
             composable(NavigationItem.Settings.route) {
                 SettingsScreen(
-                    mainViewModel = mainViewModel
+                    mainViewModel = mainViewModel,
+                    onNavigateToVault = {
+                        navController.navigate("vault")
+                    }
                 )
             }
-            // ADDED: Vault screen
-            composable(NavigationItem.Vault.route) {
+            composable("vault") {
                 SecureVaultScreen()
             }
             composable("support_resources") {
@@ -196,10 +197,4 @@ sealed class NavigationItem(
         icon = Icons.Default.Settings
     )
 
-    // ADDED: Vault navigation item
-    object Vault : NavigationItem(
-        route = "vault",
-        title = "Vault",
-        icon = Icons.Default.Security
-    )
 }

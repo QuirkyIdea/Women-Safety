@@ -89,7 +89,7 @@ private fun CalculatorScreen(onSecretUnlocked: () -> Unit) {
         if (secretBuffer.length > 4) {
             secretBuffer = secretBuffer.takeLast(4)
         }
-        if (secretBuffer == "0000") {
+        if (secretBuffer == "1111") {
             onSecretUnlocked()
             return
         }
