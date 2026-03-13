@@ -14,11 +14,14 @@ class SurakshaApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         
-        // Initialize Room database
+        // Initialize Room database with migration support
         database = Room.databaseBuilder(
             applicationContext,
             SurakshaDatabase::class.java,
             "suraksha_database"
-        ).build()
+        )
+            .addMigrations(SurakshaDatabase.MIGRATION_1_2)
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

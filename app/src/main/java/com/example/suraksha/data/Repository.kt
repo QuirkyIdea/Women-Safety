@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.Flow
 class SurakshaRepository(
     private val emergencyContactDao: EmergencyContactDao,
     private val appSettingsDao: AppSettingsDao,
-    private val safetyRecordDao: SafetyRecordDao
+    private val safetyRecordDao: SafetyRecordDao,
+    private val incidentLogDao: IncidentLogDao? = null
 ) {
     
     // Emergency Contacts
@@ -78,4 +79,20 @@ class SurakshaRepository(
     
     suspend fun getLatestUnresolvedRecord(): SafetyRecord? = 
         safetyRecordDao.getLatestUnresolvedRecord()
+
+    // Incident Logs
+    fun getIncidentLogs(): Flow<List<IncidentLog>>? =
+        incidentLogDao?.getAllLogs()
+
+    fun getIncidentLogsByType(eventType: String): Flow<List<IncidentLog>>? =
+        incidentLogDao?.getLogsByType(eventType)
+
+    suspend fun addIncidentLog(eventType: String, details: String): Long? {
+        val log = IncidentLog(eventType = eventType, details = details)
+        return incidentLogDao?.insertLog(log)
+    }
+
+    suspend fun clearIncidentLogs() {
+        incidentLogDao?.clearAll()
+    }
 }

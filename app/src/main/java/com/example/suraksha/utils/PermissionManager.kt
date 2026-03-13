@@ -23,7 +23,8 @@ object PermissionManager {
         Manifest.permission.CAMERA,
         Manifest.permission.VIBRATE,
         Manifest.permission.POST_NOTIFICATIONS,
-        Manifest.permission.CALL_PHONE
+        Manifest.permission.CALL_PHONE,
+        Manifest.permission.ANSWER_PHONE_CALLS
     )
     
     val PERMISSION_DESCRIPTIONS = mapOf(
@@ -34,7 +35,8 @@ object PermissionManager {
         Manifest.permission.CAMERA to "Record front-camera video evidence during SOS",
         Manifest.permission.VIBRATE to "Provide vibration alerts during emergencies",
         Manifest.permission.POST_NOTIFICATIONS to "Show emergency notifications",
-        Manifest.permission.CALL_PHONE to "Make emergency calls to your contacts"
+        Manifest.permission.CALL_PHONE to "Make emergency calls to your contacts",
+        Manifest.permission.ANSWER_PHONE_CALLS to "End calls programmatically during SOS"
     )
     
     val CRITICAL_PERMISSIONS = arrayOf(
@@ -103,6 +105,14 @@ object PermissionManager {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
     }
     
+    fun hasAnswerPhoneCallsPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+    
     fun hasSystemAlertWindowPermission(context: Context): Boolean {
         return android.provider.Settings.canDrawOverlays(context)
     }
@@ -152,6 +162,7 @@ object PermissionManager {
         return when (permission) {
             Manifest.permission.SEND_SMS -> PermissionCategory.EMERGENCY
             Manifest.permission.CALL_PHONE -> PermissionCategory.EMERGENCY
+            Manifest.permission.ANSWER_PHONE_CALLS -> PermissionCategory.EMERGENCY
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION -> PermissionCategory.LOCATION
             Manifest.permission.RECORD_AUDIO -> PermissionCategory.AUDIO

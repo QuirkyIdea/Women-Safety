@@ -385,6 +385,7 @@ fun getCategoryInfo(category: PermissionCategory): CategoryInfo = when (category
 fun getPermissionDisplayName(permission: String): String = when (permission) {
     Manifest.permission.SEND_SMS -> "Send SMS"
     Manifest.permission.CALL_PHONE -> "Make Calls"
+    Manifest.permission.ANSWER_PHONE_CALLS -> "End Calls"
     Manifest.permission.ACCESS_FINE_LOCATION -> "Precise Location"
     Manifest.permission.ACCESS_COARSE_LOCATION -> "Approximate Location"
     Manifest.permission.RECORD_AUDIO -> "Record Audio"

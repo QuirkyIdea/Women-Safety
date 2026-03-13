@@ -65,3 +65,18 @@ interface SafetyRecordDao {
     @Query("SELECT * FROM safety_records WHERE isResolved = 0 ORDER BY timestamp DESC LIMIT 1")
     suspend fun getLatestUnresolvedRecord(): SafetyRecord?
 }
+
+@Dao
+interface IncidentLogDao {
+    @Query("SELECT * FROM incident_logs ORDER BY timestamp DESC")
+    fun getAllLogs(): Flow<List<IncidentLog>>
+
+    @Query("SELECT * FROM incident_logs WHERE eventType = :eventType ORDER BY timestamp DESC")
+    fun getLogsByType(eventType: String): Flow<List<IncidentLog>>
+
+    @Insert
+    suspend fun insertLog(log: IncidentLog): Long
+
+    @Query("DELETE FROM incident_logs")
+    suspend fun clearAll()
+}

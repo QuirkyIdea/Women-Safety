@@ -42,7 +42,9 @@ import com.example.suraksha.R
 @Composable
 fun HomeScreen(
     mainViewModel: MainViewModel,
-    onNavigateToFakeCall: () -> Unit
+    onNavigateToFakeCall: () -> Unit,
+    onNavigateToSupport: () -> Unit = {},
+    onNavigateToLogs: () -> Unit = {}
 ) {
     val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
     val timerState by mainViewModel.timerState.collectAsStateWithLifecycle()
@@ -100,7 +102,9 @@ fun HomeScreen(
             mainViewModel = mainViewModel,
             onFakeCall = onNavigateToFakeCall,
             onTimer = { minutes -> mainViewModel.startTimer(minutes) },
-            onRecording = { }
+            onRecording = { },
+            onSupport = onNavigateToSupport,
+            onLogs = onNavigateToLogs
         )
         
         Spacer(modifier = Modifier.height(28.dp))
@@ -262,7 +266,9 @@ fun QuickActionsSection(
     mainViewModel: MainViewModel,
     onFakeCall: () -> Unit,
     onTimer: (Int) -> Unit,
-    onRecording: () -> Unit
+    onRecording: () -> Unit,
+    onSupport: () -> Unit = {},
+    onLogs: () -> Unit = {}
 ) {
     var showTimerDialog by remember { mutableStateOf(false) }
     var showPowerSOSDialog by remember { mutableStateOf(false) }
@@ -354,6 +360,24 @@ fun QuickActionsSection(
                             android.widget.Toast.LENGTH_LONG
                         ).show()
                     },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            // Row 4 — Support Resources & Incident Logs
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                QuickActionButton(
+                    icon = Icons.Default.SupportAgent,
+                    label = "Support",
+                    description = "Emergency helplines",
+                    onClick = onSupport,
+                    modifier = Modifier.weight(1f)
+                )
+                QuickActionButton(
+                    icon = Icons.Default.History,
+                    label = "Logs",
+                    description = "View incident logs",
+                    onClick = onLogs,
                     modifier = Modifier.weight(1f)
                 )
             }

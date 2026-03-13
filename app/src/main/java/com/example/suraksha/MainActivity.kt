@@ -126,6 +126,12 @@ fun SurakshaApp(mainViewModel: MainViewModel) {
                     onNavigateToFakeCall = {
                         val intent = Intent(context, FakeCallActivity::class.java)
                         context.startActivity(intent)
+                    },
+                    onNavigateToSupport = {
+                        navController.navigate("support_resources")
+                    },
+                    onNavigateToLogs = {
+                        navController.navigate("incident_logs")
                     }
                 )
             }
@@ -140,6 +146,16 @@ fun SurakshaApp(mainViewModel: MainViewModel) {
             composable(NavigationItem.Settings.route) {
                 SettingsScreen(
                     mainViewModel = mainViewModel
+                )
+            }
+            composable("support_resources") {
+                SupportResourcesScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+            composable("incident_logs") {
+                IncidentLogScreen(
+                    onBack = { navController.popBackStack() }
                 )
             }
         }

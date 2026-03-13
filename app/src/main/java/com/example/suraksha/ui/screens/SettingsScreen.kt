@@ -166,6 +166,17 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
                     checked = uiState.isAutoRecordingEnabled,
                     onCheckedChange = { mainViewModel.toggleAutoRecording(it) }
                 )
+                
+                SettingsDivider()
+                
+                // Silent Alerts
+                SettingsSwitch(
+                    icon = Icons.Default.NotificationsOff,
+                    title = "Silent Alerts",
+                    subtitle = "Send discreet SMS to contacts when SOS triggers",
+                    checked = uiState.isSilentAlertsEnabled,
+                    onCheckedChange = { mainViewModel.toggleSilentAlerts(it) }
+                )
             }
             
             Spacer(modifier = Modifier.height(28.dp))

@@ -31,7 +31,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = SurakshaRepository(
         SurakshaApplication.database.emergencyContactDao(),
         SurakshaApplication.database.appSettingsDao(),
-        SurakshaApplication.database.safetyRecordDao()
+        SurakshaApplication.database.safetyRecordDao(),
+        SurakshaApplication.database.incidentLogDao()
     )
 
     val contactsViewModel = ContactsViewModel(application)
@@ -66,6 +67,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val voiceEnabled = repository.getBooleanSetting("voice_detection_enabled", true)
             val shakeEnabled = repository.getBooleanSetting("shake_detection_enabled", true)
             val autoRec = repository.getBooleanSetting("auto_recording_enabled", true)
+            val silentAlerts = repository.getBooleanSetting("silent_alerts_enabled", false)
             val sosMsg = repository.getSetting("sos_message")
                 ?: "I AM IN DANGER! Please help me immediately!"
 
@@ -75,19 +77,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 isVoiceDetectionEnabled = voiceEnabled,
                 isShakeDetectionEnabled = shakeEnabled,
                 isAutoRecordingEnabled = autoRec,
+                isSilentAlertsEnabled = silentAlerts,
                 sosMessage = sosMsg
             )
 
             if (PermissionManager.hasLocationPermission(getApplication())) startLocationUpdates()
 
             // Always start power-button detection
-            powerButtonDetector.setOnPowerButtonListener { triggerSOS() }
+            powerButtonDetector.setOnPowerButtonListener { triggerSOS("power button") }
             powerButtonDetector.startListening()
 
             // Voice trigger — stays on even after SOS stops
             val cmd = repository.getSetting("voice_command") ?: "emergency help me"
             voiceTrigger.setCommand(cmd)
-            voiceTrigger.setOnTriggerListener { triggerSOS() }
+            voiceTrigger.setOnTriggerListener { triggerSOS("voice command") }
             voiceTrigger.setOnErrorListener { err ->
                 _uiState.value = _uiState.value.copy(errorMessage = "Voice: $err")
             }
@@ -97,7 +100,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
             // Shake trigger
             if (shakeEnabled) {
-                shakeDetector.setOnShakeListener { triggerSOS() }
+                shakeDetector.setOnShakeListener { triggerSOS("shake detection") }
                 shakeDetector.startListening()
             }
 
@@ -114,12 +117,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     // ── SOS trigger → starts SOSService ─────────────────────────────────
 
-    fun triggerSOS() {
+    fun triggerSOS(trigger: String = "manual") {
         if (_uiState.value.isSOSTriggered) return          // already running
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isSOSTriggered = true)
             val intent = Intent(getApplication(), SOSService::class.java).apply {
                 action = SOSService.ACTION_START
+                putExtra(SOSService.EXTRA_TRIGGER, trigger)
             }
             getApplication<Application>().startService(intent)
 
@@ -191,7 +195,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _timerState.value = _timerState.value.copy(
                     remainingSeconds = java.time.Duration.between(LocalDateTime.now(), end).seconds)
             }
-            if (_timerState.value.isActive) { triggerSOS(); _timerState.value = TimerState() }
+            if (_timerState.value.isActive) { triggerSOS("safety timer"); _timerState.value = TimerState() }
         }
     }
 
@@ -249,7 +253,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             repository.setBooleanSetting("shake_detection_enabled", enabled)
             if (enabled) {
-                shakeDetector.setOnShakeListener { triggerSOS() }
+                shakeDetector.setOnShakeListener { triggerSOS("shake detection") }
                 shakeDetector.startListening()
             } else shakeDetector.stopListening()
             _uiState.value = _uiState.value.copy(isShakeDetectionEnabled = enabled)
@@ -263,6 +267,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             repository.setBooleanSetting("auto_recording_enabled", enabled)
             _uiState.value = _uiState.value.copy(isAutoRecordingEnabled = enabled)
+        }
+    }
+
+    // ── Silent alerts toggle ────────────────────────────────────────────
+
+    fun toggleSilentAlerts(enabled: Boolean) {
+        viewModelScope.launch {
+            repository.setBooleanSetting("silent_alerts_enabled", enabled)
+            _uiState.value = _uiState.value.copy(isSilentAlertsEnabled = enabled)
         }
     }
 
@@ -350,6 +363,7 @@ data class MainUiState(
     val isVoiceDetectionEnabled: Boolean = false,
     val isShakeDetectionEnabled: Boolean = true,
     val isAutoRecordingEnabled: Boolean = true,
+    val isSilentAlertsEnabled: Boolean = false,
     val sosMessage: String = "I AM IN DANGER! Please help me immediately!",
     val isRecordingActive: Boolean = false,
     val recordingElapsedMs: Long = 0
