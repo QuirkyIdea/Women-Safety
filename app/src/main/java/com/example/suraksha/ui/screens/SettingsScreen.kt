@@ -109,8 +109,8 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
                 // Disguised Mode
                 SettingsSwitch(
                     icon = Icons.Default.Lock,
-                    title = "Disguised Mode",
-                    subtitle = "Change app icon to calculator for privacy",
+                    title = "Disguise as Calculator",
+                    subtitle = "App will appear as a Calculator on your home screen",
                     checked = uiState.isDisguisedMode,
                     onCheckedChange = { mainViewModel.setDisguisedMode(it) }
                 )
