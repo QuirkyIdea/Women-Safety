@@ -94,6 +94,7 @@ fun SurakshaApp(mainViewModel: MainViewModel) {
                 listOf(
                     NavigationItem.Home,
                     NavigationItem.Recordings,
+                    NavigationItem.Vault,      // ADDED
                     NavigationItem.Contacts,
                     NavigationItem.Settings
                 ).forEach { screen ->
@@ -148,6 +149,10 @@ fun SurakshaApp(mainViewModel: MainViewModel) {
                     mainViewModel = mainViewModel
                 )
             }
+            // ADDED: Vault screen
+            composable(NavigationItem.Vault.route) {
+                SecureVaultScreen()
+            }
             composable("support_resources") {
                 SupportResourcesScreen(
                     onBack = { navController.popBackStack() }
@@ -189,5 +194,12 @@ sealed class NavigationItem(
         route = "settings",
         title = "Settings",
         icon = Icons.Default.Settings
+    )
+
+    // ADDED: Vault navigation item
+    object Vault : NavigationItem(
+        route = "vault",
+        title = "Vault",
+        icon = Icons.Default.Security
     )
 }

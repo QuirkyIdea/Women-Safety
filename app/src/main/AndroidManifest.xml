@@ -18,6 +18,11 @@
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <queries>
         <intent>
@@ -58,7 +63,7 @@
             android:name=".CalculatorAlias"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".MainActivity"
+            android:targetActivity=".ui.screens.CalculatorActivity"
             android:icon="@drawable/ic_calculator_launcher"
             android:label="Calculator">
             <intent-filter>
@@ -66,6 +71,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+
+        <activity
+            android:name=".ui.screens.CalculatorActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Suraksha" />
 
         <activity android:name=".ui.screens.FakeCallActivity" android:exported="false" android:theme="@style/Theme.Suraksha" android:screenOrientation="portrait" android:showOnLockScreen="true" android:showWhenLocked="true" android:turnScreenOn="true" />
         <activity android:name=".ui.screens.OnboardingActivity" android:exported="false" android:theme="@style/Theme.Suraksha" android:screenOrientation="portrait" />
