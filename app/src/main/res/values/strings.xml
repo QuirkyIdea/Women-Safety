@@ -1,0 +1,140 @@
+<resources>
+    <string name="app_name">Suraksha</string>
+    
+    <!-- App Description -->
+    <string name="app_description">Women Safety App</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_contacts">Contacts</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Home Screen -->
+    <string name="home_title">Suraksha Safety</string>
+    <string name="home_subtitle">Your safety is our <b>priority</b>.</string>
+    <string name="sos_button">SOS</string>
+    <string name="sos_sent">SOS SENT!</string>
+    <string name="location_status">Current Location</string>
+    <string name="location_unavailable">Location not available</string>
+    <string name="quick_actions">Quick Actions</string>
+    <string name="fake_call">Fake Call</string>
+    <string name="timer">Timer</string>
+    <string name="record">Record</string>
+    <string name="power_sos">Power SOS</string>
+    <string name="voice_sos">Voice SOS</string>
+    <string name="emergency_contacts">Emergency Contacts</string>
+    <string name="no_contacts">No emergency contacts added</string>
+    <string name="safety_timer_active">Safety Timer Active</string>
+    <string name="cancel_timer">Cancel Timer</string>
+    
+    <!-- Contacts Screen -->
+    <string name="contacts_title">Emergency Contacts</string>
+    <string name="contacts_subtitle">Add up to 3 trusted contacts for emergency alerts</string>
+    <string name="add_contact">Add Emergency Contact</string>
+    <string name="max_contacts">Maximum 3 contacts allowed</string>
+    <string name="no_contacts_title">No Emergency Contacts</string>
+    <string name="no_contacts_message">Add trusted contacts to receive emergency alerts</string>
+    <string name="add_contact_dialog_title">Add Emergency Contact</string>
+    <string name="edit_contact_dialog_title">Edit Emergency Contact</string>
+    <string name="contact_name">Name</string>
+    <string name="contact_phone">Phone Number</string>
+    <string name="add">Add</string>
+    <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Settings</string>
+    <string name="safety_features">Safety Features</string>
+    <string name="disguised_mode">Disguised Mode</string>
+    <string name="disguised_mode_desc">Make app look like a calculator</string>
+    <string name="power_trigger">Power Button SOS</string>
+    <string name="power_trigger_desc">Press power button 3 times to trigger emergency</string>
+    <string name="voice_trigger">Voice Command SOS</string>
+    <string name="voice_trigger_desc">Trigger SOS with custom voice command</string>
+    <string name="voice_command">Voice Command</string>
+    <string name="voice_command_desc">Custom phrase to trigger SOS</string>
+    <string name="auto_recording">Auto Recording</string>
+    <string name="auto_recording_desc">Record audio during SOS events</string>
+    <string name="notifications">Notifications</string>
+    <string name="emergency_notifications">Emergency Notifications</string>
+    <string name="emergency_notifications_desc">Show notifications for safety events</string>
+    <string name="vibration_alerts">Vibration Alerts</string>
+    <string name="vibration_alerts_desc">Vibrate on SOS trigger</string>
+    <string name="privacy_security">Privacy &amp; Security</string>
+    <string name="data_storage">Data Storage</string>
+    <string name="data_storage_desc">All data stored locally on device</string>
+    <string name="location_accuracy">Location Accuracy</string>
+    <string name="location_accuracy_desc">High accuracy GPS for precise location</string>
+    <string name="about">About</string>
+    <string name="app_version">App Version</string>
+    <string name="help_support">Help &amp; Support</string>
+    <string name="help_support_desc">How to use the app</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_desc">How we protect your data</string>
+    
+    <!-- Permission Request -->
+    <string name="permissions_required">Permissions Required</string>
+    <string name="essential_permissions">Essential Permissions</string>
+    <string name="permissions_explanation">Suraksha needs these permissions to keep you safe in emergencies</string>
+    <string name="permission_status">Permission Status</string>
+    <string name="grant_all_permissions">Grant All Permissions</string>
+    <string name="skip_for_now">Skip for Now</string>
+    <string name="open_app_settings">Open App Settings</string>
+    <string name="manage_permissions">Manage Permissions</string>
+    <string name="permission_details">Permission Details</string>
+    <string name="permissions_granted">permissions granted</string>
+    <string name="emergency_info">Emergency Information</string>
+    <string name="emergency_info_text">• SOS button sends your location to emergency contacts\n• Press power button 3 times to trigger SOS\n• Fake call feature helps in uncomfortable situations\n• Timer automatically triggers SOS if not cancelled\n• All data is stored locally for your privacy</string>
+    
+    <!-- Onboarding -->
+    <string name="onboarding_welcome">Welcome to Suraksha</string>
+    <string name="onboarding_subtitle">Your Personal Safety Companion</string>
+    <string name="onboarding_features">Key Features</string>
+    <string name="onboarding_sos_title">One-Tap SOS</string>
+    <string name="onboarding_sos_desc">Send emergency alerts with your location to trusted contacts</string>
+    <string name="onboarding_power_title">Power Button SOS</string>
+    <string name="onboarding_power_desc">Press power button 3 times to trigger SOS automatically</string>
+    <string name="onboarding_voice_title">Voice Command SOS</string>
+    <string name="onboarding_voice_desc">Say custom voice command to trigger SOS hands-free</string>
+    <string name="onboarding_fake_call_title">Fake Call</string>
+    <string name="onboarding_fake_call_desc">Simulate incoming calls to escape uncomfortable situations</string>
+    <string name="onboarding_timer_title">Safety Timer</string>
+    <string name="onboarding_timer_desc">Set countdown timers that trigger SOS if not cancelled</string>
+    <string name="onboarding_recording_title">Emergency Recording</string>
+    <string name="onboarding_recording_desc">Automatically record audio during SOS events</string>
+    <string name="onboarding_permissions">Required Permissions</string>
+    <string name="onboarding_permissions_text">• SMS: To send emergency messages\n• Location: To share your location with contacts\n• Microphone: For voice commands and emergency audio recording\n• Storage: To save recordings locally</string>
+    <string name="get_started">Get Started</string>
+    
+    <!-- Fake Call -->
+    <string name="fake_call_caller">Mom</string>
+    <string name="fake_call_incoming">Incoming call...</string>
+    <string name="fake_call_safety_note">This is a fake call for safety purposes</string>
+    <string name="schedule_fake_call">Schedule Fake Call</string>
+    <string name="schedule_call_dialog_title">Schedule Fake Call</string>
+    <string name="schedule_call_dialog_text">Choose when to receive a fake call:</string>
+    <string name="ten_seconds">10 seconds</string>
+    <string name="thirty_seconds">30 seconds</string>
+    <string name="one_minute">1 minute</string>
+    
+    <!-- Error Messages -->
+    <string name="error_permission_denied">Permission denied</string>
+    <string name="error_location_unavailable">Location not available</string>
+    <string name="error_sms_failed">Failed to send SMS</string>
+    <string name="error_contact_required">Name and phone number are required</string>
+    <string name="error_invalid_phone">Please enter a valid phone number</string>
+    <string name="error_add_contact">Failed to add contact</string>
+    <string name="error_update_contact">Failed to update contact</string>
+    <string name="error_delete_contact">Failed to delete contact</string>
+    
+    <!-- Success Messages -->
+    <string name="success_contact_added">Contact added successfully</string>
+    <string name="success_contact_updated">Contact updated successfully</string>
+    <string name="success_contact_deleted">Contact deleted successfully</string>
+    
+    <!-- SOS Messages -->
+    <string name="sos_message_title">🚨 EMERGENCY SOS 🚨</string>
+    <string name="sos_message_body">This is an emergency message from Suraksha Safety App.\nTime: %1$s\n%2$s\n\nPlease respond immediately!</string>
+    <string name="sos_location_format">Location: https://maps.google.com/?q=%1$f,%2$f</string>
+    <string name="sos_location_unavailable">Location: Unable to get current location</string>
+</resources>
