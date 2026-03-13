@@ -161,38 +161,47 @@ class SOSService : Service() {
                     }
                 }
 
-                // 6 — WhatsApp SOS alert to primary contact
+                // 6 — STEP 1: Call ALL contacts sequentially (BLOCKING)
+                // Each call lasts exactly 10 seconds, then disconnects.
+                // The loop completes only after every contact has been called.
+                emergencyCallManager.callAllContacts(
+                    contacts = contacts,
+                    onCallStarted = { contact ->
+                        scope.launch {
+                            incidentLogger.logCallPlaced(contact.name, contact.phoneNumber)
+                        }
+                    },
+                    onCallEnded = { contact ->
+                        scope.launch {
+                            incidentLogger.logCallEnded(contact.name)
+                        }
+                    }
+                )
+
+                // 7 — STEP 2: WhatsApp alert ONLY AFTER all calls finish
+                // Brief delay to let the phone dialer UI close before
+                // launching WhatsApp — prevents the intent being swallowed.
+                delay(3000)
+
+                val freshLoc = locationTracker.currentLocation ?: loc
                 withContext(Dispatchers.Main) {
                     val primary = contacts.firstOrNull()
                     if (primary != null) {
-                        whatsAppAlertManager.sendSOSAlert(
+                        val sent = whatsAppAlertManager.sendSOSAlert(
                             phoneNumber = primary.phoneNumber,
-                            latitude = loc?.latitude,
-                            longitude = loc?.longitude,
+                            latitude = freshLoc?.latitude,
+                            longitude = freshLoc?.longitude,
                             customMessage = phrase
                         )
-                        incidentLogger.logWhatsAppSent(primary.name)
+                        if (sent) {
+                            incidentLogger.logWhatsAppSent(primary.name)
+                        } else {
+                            incidentLogger.logError("WhatsApp alert failed for ${primary.name}")
+                        }
                     }
                 }
 
-                // 7 — Sequential calling (10 s each) in separate coroutine
-                callingJob = scope.launch {
-                    emergencyCallManager.callAllContacts(
-                        contacts = contacts,
-                        onCallStarted = { contact ->
-                            scope.launch {
-                                incidentLogger.logCallPlaced(contact.name, contact.phoneNumber)
-                            }
-                        },
-                        onCallEnded = { contact ->
-                            scope.launch {
-                                incidentLogger.logCallEnded(contact.name)
-                            }
-                        }
-                    )
-                }
-
-                // 8 — 60-second audio recording loop with WhatsApp send
+                // 8 — 60-second audio recording loop (runs concurrently)
                 audioLoopJob = scope.launch { audioLoop(contacts) }
 
                 // 9 — Periodic location SMS every 30 seconds
