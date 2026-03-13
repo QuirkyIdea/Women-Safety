@@ -149,24 +149,37 @@ class WhatsAppAlertManager(private val context: Context) {
      * Uses the WhatsApp deep-link API for direct chat opening.
      */
     private fun openWhatsAppChat(phoneNumber: String, message: String): Boolean {
-        return try {
-            val phone = formatPhone(phoneNumber)
-            val encodedMsg = Uri.encode(message)
-            val intent = Intent(Intent.ACTION_VIEW).apply {
+        val phone = formatPhone(phoneNumber)
+        val encodedMsg = Uri.encode(message)
+
+        // Attempt 1: Direct WhatsApp intent with package set explicitly.
+        // resolveActivity() is NOT used — it returns null on Android 11+ due
+        // to package visibility filtering, even when WhatsApp IS installed.
+        try {
+            val directIntent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("https://api.whatsapp.com/send?phone=$phone&text=$encodedMsg")
+                `package` = WHATSAPP_PKG
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(directIntent)
+            Log.d(TAG, "WhatsApp SOS alert launched → $phone")
+            return true
+        } catch (e: Exception) {
+            Log.w(TAG, "Direct WhatsApp intent failed: ${e.message}")
+        }
+
+        // Attempt 2: Fallback without package restriction (opens browser or chooser)
+        try {
+            val fallbackIntent = Intent(Intent.ACTION_VIEW).apply {
                 data = Uri.parse("https://api.whatsapp.com/send?phone=$phone&text=$encodedMsg")
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-            if (intent.resolveActivity(context.packageManager) != null) {
-                context.startActivity(intent)
-                Log.d(TAG, "WhatsApp SOS alert launched → $phone")
-                true
-            } else {
-                Log.w(TAG, "WhatsApp not installed — cannot send alert")
-                false
-            }
+            context.startActivity(fallbackIntent)
+            Log.d(TAG, "WhatsApp fallback intent launched → $phone")
+            return true
         } catch (e: Exception) {
-            Log.e(TAG, "openWhatsAppChat failed: ${e.message}")
-            false
+            Log.e(TAG, "All WhatsApp launch attempts failed: ${e.message}")
+            return false
         }
     }
 
