@@ -78,7 +78,7 @@ class SOSService : Service() {
             SurakshaApplication.database.safetyRecordDao(),
             SurakshaApplication.database.incidentLogDao()
         )
-        audioRecorder = AudioRecorderManager(this)
+        audioRecorder = AudioRecorderManager(this, scope)
         emergencyCallManager = EmergencyCallManager(this)
         locationTracker = LocationTracker(this)
         incidentLogger = IncidentLogger(SurakshaApplication.database.incidentLogDao())

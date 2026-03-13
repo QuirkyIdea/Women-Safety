@@ -4,6 +4,10 @@ import android.content.Context
 import android.media.MediaRecorder
 import android.os.Build
 import android.util.Log
+import com.example.suraksha.data.VaultFileType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,7 +21,7 @@ import java.util.*
  *  2. After 60 s the caller invokes [stopRecording] → returns the [File].
  *  3. File is sent via WhatsApp, then [deleteFile] cleans it up.
  */
-class AudioRecorderManager(private val context: Context) {
+class AudioRecorderManager(private val context: Context, private val scope: CoroutineScope) {
 
     companion object {
         private const val TAG = "AudioRecorderManager"
@@ -86,7 +90,24 @@ class AudioRecorderManager(private val context: Context) {
             mediaRecorder = null
             isRecording = false
             Log.d(TAG, "Recording stopped → ${currentFile?.absolutePath}")
-            currentFile
+            val outputFile = currentFile
+
+            // ADDED: silently back up to secure vault
+            if (outputFile != null && outputFile.exists()) {
+                scope.launch(Dispatchers.IO) {
+                    try {
+                        SecureVaultManager(context).addToVault(
+                            source = outputFile,
+                            type = VaultFileType.AUDIO,
+                            originalName = outputFile.name
+                        )
+                    } catch (e: Exception) {
+                        Log.e("AudioRecorder", "Vault backup failed", e)
+                    }
+                }
+            }
+
+            outputFile
         } catch (e: Exception) {
             Log.e(TAG, "stopRecording failed: ${e.message}")
             cleanup()
